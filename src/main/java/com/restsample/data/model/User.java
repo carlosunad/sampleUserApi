@@ -12,7 +12,7 @@ import java.io.Serializable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-@SpELAssert(value = "userStatus.equals(\"Active\") || userStatus.equals(\"Blocked\")",
+@SpELAssert(value = "userStatus == null || userStatus.equals(\"Active\") || userStatus.equals(\"Blocked\")",
         message = "Status not valid")
 @Document
 public class User implements Serializable {
