@@ -35,8 +35,13 @@ A project to implement the sample user API swagger specification
     
         git clone https://github.com/carlosunad/sampleUserApi
         
-2. Access the project folder e.g. cd sampleUserApi
-3. Execute the startup command gradle bootRun
+2. Access the project folder e.g. 
+
+        cd sampleUserApi
+    
+3. Execute the startup command 
+
+       gradle bootRun
 
 # Test coverage
 
@@ -51,3 +56,6 @@ the log file is located at the root folder and is called:
 
     logging-user-api.log
     
+# Swagger test url
+
+http://localhost:8080/swagger/index.html
