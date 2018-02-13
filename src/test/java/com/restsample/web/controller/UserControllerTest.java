@@ -4,9 +4,9 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.restsample.Application;
@@ -57,14 +57,15 @@ public class UserControllerTest {
         // Given that
         User user = createUser();
         user.setUsername("aabbcc");
-        //when
+
         Mockito.when(userServiceMock.create(anyObject())).thenReturn(user);
 
-        // validate
+        //when
         mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"username\": \"TEST_NAME\"}"))
                 .andExpect(status().isCreated());
+        // validate
         verify(userServiceMock, times(1)).create(any());
 
     }
@@ -82,7 +83,7 @@ public class UserControllerTest {
         mockMvc.perform(get("/users/sampleName")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk());
-        verify(userServiceMock, times(1)).findOne("sampleName");
+        verify(userServiceMock, times(1)).findByUsername("sampleName");
     }
 
     @Test
@@ -91,15 +92,15 @@ public class UserControllerTest {
         User user = createUser();
         user.setUsername("aabbcc");
 
-        // when
-        Mockito.when(userServiceMock.update(anyObject())).thenReturn(user);
+        Mockito.doReturn(user).when(userServiceMock).findByUsername(anyObject());
 
-        // validate
-        mockMvc.perform(put("/users/sampleName")
+        // when
+        mockMvc.perform(get("/users/sampleName")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"username\": \"TEST_NAME\"}"))
+                .content(""))
                 .andExpect(status().isOk());
-        verify(userServiceMock, times(1)).update(any());
+        // validate
+        verify(userServiceMock, times(1)).findByUsername(any());
     }
 
     @Test
@@ -109,14 +110,15 @@ public class UserControllerTest {
         user.setUsername("aabbcc");
 
         // when
+        Mockito.doReturn(user).when(userServiceMock).findByUsername(anyObject());
         Mockito.doNothing().when(userServiceMock).delete(anyObject());
 
         // validate
-        mockMvc.perform(put("/users/sampleName")
+        mockMvc.perform(delete("/users/sampleName")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"username\": \"TEST_NAME\"}"))
             .andExpect(status().isOk());
-        verify(userServiceMock, times(1)).update(any());
+        verify(userServiceMock, times(1)).delete(any());
     }
 
     private User createUser(){
